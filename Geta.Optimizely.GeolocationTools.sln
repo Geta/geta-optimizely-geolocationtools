@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26430.13
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.31903.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geta.EPi.GeolocationTools", "src\Geta.Epi.GeolocationTools\Geta.EPi.GeolocationTools.csproj", "{D9818A10-A61E-4F01-919B-A6B4B3A6F817}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geta.Optimizely.GeolocationTools", "src\Geta.Optimizely.GeolocationTools\Geta.Optimizely.GeolocationTools.csproj", "{D9818A10-A61E-4F01-919B-A6B4B3A6F817}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geta.EPi.GeolocationTools.Commerce", "src\Geta.Epi.GeolocationTools.Commerce\Geta.EPi.GeolocationTools.Commerce.csproj", "{4376E95B-BC3E-4562-AEB9-CC72CEA04203}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geta.Optimizely.GeolocationTools.Commerce", "src\Geta.Optimizely.GeolocationTools.Commerce\Geta.Optimizely.GeolocationTools.Commerce.csproj", "{4376E95B-BC3E-4562-AEB9-CC72CEA04203}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,5 +24,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A8CDCC59-9245-46C4-B37D-ECE97A69E821}
 	EndGlobalSection
 EndGlobal
