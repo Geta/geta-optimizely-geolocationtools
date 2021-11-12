@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Web;
-using System.Web.Routing;
 using EPiServer.DataAbstraction;
 using EPiServer.Personalization;
 using EPiServer.ServiceLocation;
