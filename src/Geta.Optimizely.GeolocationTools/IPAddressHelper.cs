@@ -1,47 +1,25 @@
-using System.Linq;
-using System.Net;
-using System.Web;
+// Copyright (c) Geta Digital. All rights reserved.
+// Licensed under Apache-2.0. See the LICENSE file in the project root for more information
 
-namespace Geta.EPi.GeolocationTools
+using System.Net;
+using Microsoft.AspNetCore.Http;
+
+namespace Geta.Optimizely.GeolocationTools
 {
     /// <summary>
     /// Helper class to retrieve correct IP address from request
     /// </summary>
     internal static class IPAddressHelper
     {
-        public static IPAddress GetRequestIpAddress(HttpRequestBase request)
+        public static IPAddress GetRequestIpAddress(HttpRequest request)
         {
             var test = GetDevIPAddress(request);
-            if (!string.IsNullOrEmpty(test))
-            {
-                return ParseIpAddress(test);
-            }
-
-            var address = request.ServerVariables["True-Client-IP"];
-            if (string.IsNullOrWhiteSpace(address))
-            {
-                var forwardedForAddresses = request.ServerVariables["HTTP_X_FORWARDED_FOR"];
-                if (!string.IsNullOrEmpty(forwardedForAddresses))
-                {
-                    var addresses = forwardedForAddresses.Split(',');
-                    if (addresses.Length > 0)
-                    {
-                        address = addresses.FirstOrDefault();
-                    }
-                }
-            }
-
-            if (string.IsNullOrWhiteSpace(address))
-            {
-                address = request.ServerVariables["REMOTE_ADDR"];
-            }
-
-            return ParseIpAddress(address);
+            return !string.IsNullOrEmpty(test) ? ParseIpAddress(test) : request.HttpContext.Connection.RemoteIpAddress;
         }
 
         private static IPAddress ParseIpAddress(string address)
         {
-            if (!IPAddress.TryParse(address, out IPAddress ipAddress))
+            if (!IPAddress.TryParse(address, out var ipAddress))
             {
                 return IPAddress.None;
             }
@@ -49,9 +27,9 @@ namespace Geta.EPi.GeolocationTools
             return ipAddress;
         }
 
-        private static string GetDevIPAddress(HttpRequestBase request)
+        private static string GetDevIPAddress(HttpRequest request)
         {
-            return request?.Cookies[Constants.IPAddressOverride]?.Value;
+            return request?.Cookies[Constants.IPAddressOverride];
         }
     }
 }

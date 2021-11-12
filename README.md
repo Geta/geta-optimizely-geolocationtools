@@ -16,8 +16,19 @@ Builds on top of Episervers' built in support for [geolocation](https://world.ep
 * Override ip address for local development testing (by setting a cookie)
 
 ## How to get started?
-* ``install-package Geta.EPi.GeolocationTools``
-* ``install-package Geta.EPi.GeolocationTools.Commerce``
+* `dotnet add-package Geta.Optimizely.GeolocationTools`
+* `dotnet add-package Geta.Optimizely.GeolocationTools.Commerce`
+* add following line to your `ConfigureServices` method (usually in `Startup.cs`)
+
+```csharp
+services.AddGeolocationTools();
+```
+
+* add following line to your `Configure` method (usually in `Startup.cs`)
+
+```csharp
+app.UseGeolocationTools();
+```
 
 ## Details
 
@@ -28,8 +39,8 @@ Either in code:
 // This will be gone next request
 Request.Cookies.Add(new HttpCookie(Geta.EPi.GeolocationTools.Constants.IPAddressOverride)
 {
-	Value = "59.107.128.65", // Chinese ip address
-	Expires = DateTime.Now.AddYears(1)
+    Value = "59.107.128.65", // Chinese ip address
+    Expires = DateTime.Now.AddYears(1)
 });
 var result = _commerceGeolocationService.GetMarket(Request);
 

@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.31903.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geta.Optimizely.GeolocationTools", "src\Geta.Optimizely.GeolocationTools\Geta.Optimizely.GeolocationTools.csproj", "{D9818A10-A61E-4F01-919B-A6B4B3A6F817}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Geta.Optimizely.GeolocationTools", "src\Geta.Optimizely.GeolocationTools\Geta.Optimizely.GeolocationTools.csproj", "{D9818A10-A61E-4F01-919B-A6B4B3A6F817}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2F2B4FA3-41FC-4766-8357-4585038D1142}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

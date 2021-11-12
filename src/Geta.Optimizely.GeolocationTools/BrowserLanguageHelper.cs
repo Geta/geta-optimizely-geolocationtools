@@ -1,9 +1,11 @@
-using Microsoft.AspNetCore.Http;
+// Copyright (c) Geta Digital. All rights reserved.
+// Licensed under Apache-2.0. See the LICENSE file in the project root for more information
+
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using Microsoft.AspNetCore.Http;
 
-namespace Geta.EPi.GeolocationTools
+namespace Geta.Optimizely.GeolocationTools
 {
     internal static class BrowserLanguageHelper
     {
@@ -13,7 +15,7 @@ namespace Geta.EPi.GeolocationTools
         /// </summary>
         public static IEnumerable<string> GetBrowserLanguages(HttpRequest request)
         {
-            return (request.UserLanguages ?? Enumerable.Empty<string>())
+            return (request.GetTypedHeaders().AcceptLanguage?.Select(kv => kv.Value.Value) ?? Enumerable.Empty<string>())
                 .Select(CleanupUserLanguage)
                 .Where(x => !string.IsNullOrWhiteSpace(x));
         }

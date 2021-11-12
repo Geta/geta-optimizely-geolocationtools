@@ -1,11 +1,13 @@
+// Copyright (c) Geta Digital. All rights reserved.
+// Licensed under Apache-2.0. See the LICENSE file in the project root for more information
+
 using System.Collections.Generic;
 using System.Net;
-using System.Web;
-using System.Web.Routing;
 using EPiServer.DataAbstraction;
 using EPiServer.Personalization;
+using Microsoft.AspNetCore.Http;
 
-namespace Geta.EPi.GeolocationTools.Services
+namespace Geta.Optimizely.GeolocationTools.Services
 {
     public interface IGeolocationService
     {
@@ -15,8 +17,8 @@ namespace Geta.EPi.GeolocationTools.Services
         /// 2. Language branch for users' browser preferences
         /// 3. Fallback language
         /// </summary>
-        LanguageBranch GetLanguage(HttpRequestBase requestBase);
-        
+        LanguageBranch GetLanguage(HttpRequest requestBase);
+
         /// <summary>
         /// Gets the language based on the users' location.
         /// 1. Language branch for the users country
@@ -29,7 +31,7 @@ namespace Geta.EPi.GeolocationTools.Services
         /// 1. Language branch for the users country
         /// 2. null
         /// </summary>
-        LanguageBranch GetLanguageByCountry(HttpRequestBase requestBase);
+        LanguageBranch GetLanguageByCountry(HttpRequest requestBase);
 
         /// <summary>
         /// Gets the language based on the users' browser preferences.
@@ -43,7 +45,7 @@ namespace Geta.EPi.GeolocationTools.Services
         /// 1. Language branch for users' browser preferences
         /// 2. null
         /// </summary>
-        LanguageBranch GetLanguageByBrowserPreferences(HttpRequestBase requestBase);
+        LanguageBranch GetLanguageByBrowserPreferences(HttpRequest requestBase);
 
         /// <summary>
         /// Gets the language based on the users' location AND browser preferences.
@@ -57,16 +59,16 @@ namespace Geta.EPi.GeolocationTools.Services
         /// 1. Language branch for users' location AND browser preferences
         /// 2. null
         /// </summary>
-        LanguageBranch GetLanguageByCountryAndBrowserLanguage(HttpRequestBase requestBase);
+        LanguageBranch GetLanguageByCountryAndBrowserLanguage(HttpRequest requestBase);
 
-        IGeolocationResult GetLocation(HttpRequestBase requestContext);
-        IGeolocationResult GetLocation(RequestContext requestContext);
+        IGeolocationResult GetLocation(HttpRequest requestRequest);
+
         IGeolocationResult GetLocation(IPAddress ipAddress);
-        
+
         /// <summary>
         /// Returns the browser locales from the request.
         /// da, en-gb;q=0.8, en;q=0.7 -> list with 'da', 'en-gb' and 'en'
         /// </summary>
-        IEnumerable<string> GetBrowserLanguages(HttpRequestBase request);
+        IEnumerable<string> GetBrowserLanguages(HttpRequest request);
     }
 }

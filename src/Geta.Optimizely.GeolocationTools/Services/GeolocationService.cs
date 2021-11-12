@@ -1,14 +1,18 @@
+// Copyright (c) Geta Digital. All rights reserved.
+// Licensed under Apache-2.0. See the LICENSE file in the project root for more information
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
 using EPiServer.DataAbstraction;
+using EPiServer.Globalization;
 using EPiServer.Personalization;
 using EPiServer.ServiceLocation;
-using EPiServer.Globalization;
+using Microsoft.AspNetCore.Http;
 
-namespace Geta.EPi.GeolocationTools.Services
+namespace Geta.Optimizely.GeolocationTools.Services
 {
     [ServiceConfiguration(ServiceType = typeof(IGeolocationService))]
     public class GeolocationService : IGeolocationService
@@ -17,7 +21,9 @@ namespace Geta.EPi.GeolocationTools.Services
         private readonly List<LanguageBranch> _enabledLanguageBranches;
         private readonly IGeolocationProvider _geolocationProvider;
 
-        public GeolocationService(ILanguageBranchRepository languageBranchRepository, IGeolocationProvider geolocationProvider)
+        public GeolocationService(
+            ILanguageBranchRepository languageBranchRepository,
+            IGeolocationProvider geolocationProvider)
         {
             _languageBranchRepository = languageBranchRepository;
             _enabledLanguageBranches = _languageBranchRepository.ListEnabled().OrderBy(x => x.SortIndex).ToList();
@@ -30,7 +36,7 @@ namespace Geta.EPi.GeolocationTools.Services
         /// 2. Language branch for users' browser preferences
         /// 3. Fallback language
         /// </summary>
-        public LanguageBranch GetLanguage(HttpRequestBase requestBase)
+        public LanguageBranch GetLanguage(HttpRequest requestBase)
         {
             if (requestBase == null)
             {
@@ -68,7 +74,7 @@ namespace Geta.EPi.GeolocationTools.Services
         /// 1. Language branch for the users country
         /// 2. null
         /// </summary>
-        public LanguageBranch GetLanguageByCountry(HttpRequestBase requestBase)
+        public LanguageBranch GetLanguageByCountry(HttpRequest requestBase)
         {
             var location = GetLocation(requestBase);
             return location != null ? GetLanguageByCountry(location) : null;
@@ -96,7 +102,7 @@ namespace Geta.EPi.GeolocationTools.Services
         /// 1. Language branch for users' browser preferences
         /// 2. null
         /// </summary>
-        public LanguageBranch GetLanguageByBrowserPreferences(HttpRequestBase requestBase)
+        public LanguageBranch GetLanguageByBrowserPreferences(HttpRequest requestBase)
         {
             var browserLanguages = GetBrowserLanguages(requestBase);
             return GetLanguageByBrowserPreferences(browserLanguages);
@@ -130,30 +136,22 @@ namespace Geta.EPi.GeolocationTools.Services
         /// 1. Language branch for users' location AND browser preferences
         /// 2. null
         /// </summary>
-        public LanguageBranch GetLanguageByCountryAndBrowserLanguage(HttpRequestBase requestBase)
+        public LanguageBranch GetLanguageByCountryAndBrowserLanguage(HttpRequest requestBase)
         {
             var location = GetLocation(requestBase);
             var browserLanguages = GetBrowserLanguages(requestBase);
             return location != null ? GetLanguageByCountryAndBrowserLanguage(location, browserLanguages) : null;
         }
 
-        public IGeolocationResult GetLocation(HttpRequestBase requestContext)
-        {
-            if (requestContext == null)
-            {
-                return null;
-            }
-            return GetLocation(requestContext.RequestContext);
-        }
 
-        public IGeolocationResult GetLocation(RequestContext requestContext)
+        public IGeolocationResult GetLocation(HttpRequest requestRequest)
         {
-            if (requestContext == null)
+            if (requestRequest == null)
             {
-                throw new ArgumentNullException(nameof(requestContext));
+                throw new ArgumentNullException(nameof(requestRequest));
             }
 
-            return GetLocation(IPAddressHelper.GetRequestIpAddress(requestContext.HttpContext.Request));
+            return GetLocation(IPAddressHelper.GetRequestIpAddress(requestRequest));
         }
 
         public IGeolocationResult GetLocation(IPAddress ipAddress)
@@ -173,7 +171,7 @@ namespace Geta.EPi.GeolocationTools.Services
         /// Returns the browser locales from the request.
         /// da, en-gb;q=0.8, en;q=0.7 -> list with 'da', 'en-gb' and 'en'
         /// </summary>
-        public IEnumerable<string> GetBrowserLanguages(HttpRequestBase request)
+        public IEnumerable<string> GetBrowserLanguages(HttpRequest request)
         {
             if (request == null)
             {
