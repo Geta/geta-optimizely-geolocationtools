@@ -1,10 +1,13 @@
-using System.Globalization;
-using System.Web;
-using EPiServer.Personalization;
-using Geta.EPi.GeolocationTools.Commerce.Models;
-using Mediachase.Commerce;
+// Copyright (c) Geta Digital. All rights reserved.
+// Licensed under Apache-2.0. See the LICENSE file in the project root for more information
 
-namespace Geta.EPi.GeolocationTools.Commerce.Services
+using System.Globalization;
+using EPiServer.Personalization;
+using Geta.Optimizely.GeolocationTools.Commerce.Models;
+using Mediachase.Commerce;
+using Microsoft.AspNetCore.Http;
+
+namespace Geta.Optimizely.GeolocationTools.Commerce.Services
 {
     public interface ICommerceGeolocationService
     {
@@ -14,7 +17,7 @@ namespace Geta.EPi.GeolocationTools.Commerce.Services
         /// </summary>
         /// <param name="request">The request.</param>
         /// <returns>Market, language and location can be null</returns>
-        ICommerceGeolocationResult GetMarket(HttpRequestBase request);
+        ICommerceGeolocationResult GetMarket(HttpRequest request);
 
         /// <summary>
         /// Gets the language based on the browser UserLanguages and the given market.
@@ -22,7 +25,7 @@ namespace Geta.EPi.GeolocationTools.Commerce.Services
         /// <param name="request">The request.</param>
         /// <param name="market">The market.</param>
         /// <returns></returns>
-        CultureInfo GetLanguage(HttpRequestBase request, IMarket market);
+        CultureInfo GetLanguage(HttpRequest request, IMarket market);
 
         /// <summary>
         /// Gets the market based on the IP address.

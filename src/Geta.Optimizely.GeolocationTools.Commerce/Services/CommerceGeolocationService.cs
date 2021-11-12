@@ -1,16 +1,19 @@
+// Copyright (c) Geta Digital. All rights reserved.
+// Licensed under Apache-2.0. See the LICENSE file in the project root for more information
+
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Web;
 using Bia.Countries.Iso3166;
 using EPiServer.Personalization;
 using EPiServer.ServiceLocation;
-using Geta.EPi.GeolocationTools.Commerce.Models;
-using Geta.EPi.GeolocationTools.Services;
+using Geta.Optimizely.GeolocationTools.Commerce.Models;
+using Geta.Optimizely.GeolocationTools.Services;
 using Mediachase.Commerce;
 using Mediachase.Commerce.Markets;
+using Microsoft.AspNetCore.Http;
 
-namespace Geta.EPi.GeolocationTools.Commerce.Services
+namespace Geta.Optimizely.GeolocationTools.Commerce.Services
 {
     [ServiceConfiguration(ServiceType = typeof(ICommerceGeolocationService))]
     public class CommerceGeolocationService : ICommerceGeolocationService
@@ -30,7 +33,7 @@ namespace Geta.EPi.GeolocationTools.Commerce.Services
         /// </summary>
         /// <param name="request">The request.</param>
         /// <returns>Market and language and location tuple, which can be null</returns>
-        public ICommerceGeolocationResult GetMarket(HttpRequestBase request)
+        public ICommerceGeolocationResult GetMarket(HttpRequest request)
         {
             if (request == null)
             {
@@ -60,7 +63,7 @@ namespace Geta.EPi.GeolocationTools.Commerce.Services
         /// <param name="request">The request.</param>
         /// <param name="market">The market.</param>
         /// <returns></returns>
-        public CultureInfo GetLanguage(HttpRequestBase request, IMarket market)
+        public CultureInfo GetLanguage(HttpRequest request, IMarket market)
         {
             if (request == null)
             {
@@ -104,7 +107,7 @@ namespace Geta.EPi.GeolocationTools.Commerce.Services
             return marketsWithCountry.FirstOrDefault();
         }
 
-        private (IMarket market, CultureInfo uiLanguage) GetMarket(HttpRequestBase request, IGeolocationResult geolocationResult)
+        private (IMarket market, CultureInfo uiLanguage) GetMarket(HttpRequest request, IGeolocationResult geolocationResult)
         {
             var marketWithCountry = GetMarket(geolocationResult);
             if (marketWithCountry == null)

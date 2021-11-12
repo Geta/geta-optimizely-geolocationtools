@@ -1,11 +1,14 @@
-﻿using System.Linq;
-using System.Web;
+// Copyright (c) Geta Digital. All rights reserved.
+// Licensed under Apache-2.0. See the LICENSE file in the project root for more information
+
+using System.Linq;
 using EPiServer.Business.Commerce;
-using Geta.EPi.GeolocationTools.Commerce.Services;
+using Geta.Optimizely.GeolocationTools.Commerce.Services;
 using Mediachase.Commerce;
 using Mediachase.Commerce.Markets;
+using Microsoft.AspNetCore.Http;
 
-namespace Geta.EPi.GeolocationTools.Commerce
+namespace Geta.Optimizely.GeolocationTools.Commerce
 {
     public class CurrentMarketFromGeolocation : ICurrentMarket
     {
@@ -13,13 +16,17 @@ namespace Geta.EPi.GeolocationTools.Commerce
         protected static MarketId DefaultMarketId; // TODO check if it is enabled?
         protected readonly IMarketService MarketService;
         protected readonly ICommerceGeolocationService CommerceGeolocationService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CurrentMarketFromGeolocation(IMarketService marketService, ICommerceGeolocationService commerceGeolocationService)
+        public CurrentMarketFromGeolocation(
+            IMarketService marketService,
+            ICommerceGeolocationService commerceGeolocationService,
+            IHttpContextAccessor httpContextAccessor)
         {
             MarketService = marketService;
-            DefaultMarketId = marketService.GetAllMarkets().FirstOrDefault(x => x.IsEnabled)?.MarketId ??
-                              new MarketId("DEFAULT");
+            DefaultMarketId = marketService.GetAllMarkets().FirstOrDefault(x => x.IsEnabled)?.MarketId ?? new MarketId("DEFAULT");
             CommerceGeolocationService = commerceGeolocationService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public virtual IMarket GetCurrentMarket()
@@ -36,14 +43,13 @@ namespace Geta.EPi.GeolocationTools.Commerce
                 return new MarketId(marketName);
             }
 
-            if (HttpContext.Current != null)
+            if (_httpContextAccessor.HttpContext != null)
             {
-                // TODO inject HttpContext?
-                var httpContextBase = new HttpRequestWrapper(HttpContext.Current.Request);
-                var result = CommerceGeolocationService.GetMarket(httpContextBase);
+                var result = CommerceGeolocationService.GetMarket(_httpContextAccessor.HttpContext.Request);
                 var market = result.Market;
                 var marketId = market?.MarketId ?? DefaultMarketId;
                 CookieHelper.Set(MarketCookie, marketId.Value);
+
                 return marketId;
             }
 
