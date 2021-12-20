@@ -31,5 +31,9 @@
   <ItemGroup>
     <ProjectReference Include="..\Geta.Optimizely.GeolocationTools\Geta.Optimizely.GeolocationTools.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="..\..\images\icon.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
 </Project>
