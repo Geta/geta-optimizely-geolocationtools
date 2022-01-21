@@ -1,14 +1,13 @@
-# Geta Episerver geolocation tools
+# Geta Optimizely geolocation tools
 
-* Master<br>
-![](http://tc.geta.no/app/rest/builds/buildType:(id:GetaPackages_EPiGeolocationTools_00ci),branch:master/statusIcon)
+![](http://tc.geta.no/app/rest/builds/buildType:(id:GetaPackages_OptimizelyGoogleProductFeed_00ci),branch:master/statusIcon)
 
 ## Description
-This library can be used to retrieve the languagebranch which matches the given request best. It provides methods to retrieve a preferred languagebranch by a users' geolocation, [browser language preference](https://www.w3.org/International/questions/qa-lang-priorities)  or both.
+This library can be used to retrieve the languagebranch which matches the given request best. It provides methods to retrieve a preferred languagebranch by a users' geolocation, [browser language preference](https://www.w3.org/International/questions/qa-lang-priorities) or both.
 The commerce library can be used to find the right market and corresponding language based on the same parameters.
-Useful to prompt the user that a different language might suit him/her better.
+Useful to prompt the user that a different language might suit them better.
 Useful for setting the right market for a user or for suggesting a specific market and language.
-Builds on top of Episervers' built in support for [geolocation](https://world.episerver.com/documentation/developer-guides/CMS/personalization/Configuring-personalization/)
+Builds on top of Optimizely's built in support for [geolocation](https://world.optimizely.com/documentation/developer-guides/CMS/personalization/Configuring-personalization/)
 
 ## Features
 * Get languagebranch by geolocation, preferred browser languages or both
@@ -68,14 +67,14 @@ Or add a cookie "geolocation_ip_override" in your browser dev tools.
 |      FI      | 146.161.232.141 |
 |      NO      |   169.51.80.85  |
 
-### Code example for Geta.EPi.GeolocationTools
+### Code example - Geta.Optimizely.GeolocationTools
+
 ```csharp
 public class LanguageBranchExample : Controller
 {
     private readonly IGeolocationService _geolocationService;
 
-    public LanguageBranchExample(
-        IGeolocationService geolocationService)
+    public LanguageBranchExample(IGeolocationService geolocationService)
     {
         _geolocationService = geolocationService;
     }
@@ -90,18 +89,16 @@ public class LanguageBranchExample : Controller
     }
 }
 ```
-### Code example for Geta.EPi.GeolocationTools.Commerce
+### Code example - Geta.Optimizely.GeolocationTools.Commerce
+
 Register ICurrentMarket implementation
+
 ```csharp
- public class StructureMapRegistry : Registry
-{
-    public StructureMapRegistry()
-    {
-        For<ICurrentMarket>().Use<CurrentMarketFromGeolocation>()}
-    }
-}
+services.AddScoped<ICurrentMarket, CurrentMarketFromGeolocation>();
 ```
+
 Get market based on geolocation and browser preferences
+
 ```csharp
 public class MarketExample : Controller
 {
