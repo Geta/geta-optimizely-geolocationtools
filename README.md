@@ -1,6 +1,9 @@
 # Geta Optimizely geolocation tools
 
 ![](http://tc.geta.no/app/rest/builds/buildType:(id:GetaPackages_OptimizelyGoogleProductFeed_00ci),branch:master/statusIcon)
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=Geta_geta-optimizely-geolocationtools)](https://sonarcloud.io/summary/new_code?id=Geta_geta-optimizely-geolocationtools)
+[![Platform](https://img.shields.io/badge/Platform-.NET%205-blue.svg?style=flat)](https://docs.microsoft.com/en-us/dotnet/)
+[![Platform](https://img.shields.io/badge/Optimizely-%2012-orange.svg?style=flat)](http://world.episerver.com/cms/)
 
 ## Description
 This library can be used to retrieve the languagebranch which matches the given request best. It provides methods to retrieve a preferred languagebranch by a users' geolocation, [browser language preference](https://www.w3.org/International/questions/qa-lang-priorities) or both.
