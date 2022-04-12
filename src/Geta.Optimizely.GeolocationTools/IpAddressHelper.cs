@@ -9,27 +9,24 @@ namespace Geta.Optimizely.GeolocationTools
     /// <summary>
     /// Helper class to retrieve correct IP address from request
     /// </summary>
-    internal static class IPAddressHelper
+    internal static class IpAddressHelper
     {
         public static IPAddress GetRequestIpAddress(HttpRequest request)
         {
-            var test = GetDevIPAddress(request);
+            var test = GetDevIpAddress(request);
             return !string.IsNullOrEmpty(test) ? ParseIpAddress(test) : request.HttpContext.Connection.RemoteIpAddress;
         }
 
         private static IPAddress ParseIpAddress(string address)
         {
-            if (!IPAddress.TryParse(address, out var ipAddress))
-            {
-                return IPAddress.None;
-            }
-
-            return ipAddress;
+            return IPAddress.TryParse(address, out var ipAddress)
+                ? ipAddress
+                : IPAddress.None;
         }
 
-        private static string GetDevIPAddress(HttpRequest request)
+        private static string GetDevIpAddress(HttpRequest request)
         {
-            return request?.Cookies[Constants.IPAddressOverride];
+            return request?.Cookies[Constants.IpAddressOverride];
         }
     }
 }

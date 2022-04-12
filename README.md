@@ -6,18 +6,23 @@
 [![Platform](https://img.shields.io/badge/Optimizely-%2012-orange.svg?style=flat)](http://world.episerver.com/cms/)
 
 ## Description
-This library can be used to retrieve the languagebranch which matches the given request best. It provides methods to retrieve a preferred languagebranch by a users' geolocation, [browser language preference](https://www.w3.org/International/questions/qa-lang-priorities) or both.
-The commerce library can be used to find the right market and corresponding language based on the same parameters.
-Useful to prompt the user that a different language might suit them better.
-Useful for setting the right market for a user or for suggesting a specific market and language.
-Builds on top of Optimizely's built in support for [geolocation](https://world.optimizely.com/documentation/developer-guides/CMS/personalization/Configuring-personalization/)
+
+This library can be used to retrieve the languagebranch which matches the given request best. It provides methods to
+retrieve a preferred languagebranch by a users'
+geolocation, [browser language preference](https://www.w3.org/International/questions/qa-lang-priorities) or both. The
+commerce library can be used to find the right market and corresponding language based on the same parameters. Useful to
+prompt the user that a different language might suit them better. Useful for setting the right market for a user or for
+suggesting a specific market and language. Builds on top of Optimizely's built in support
+for [geolocation](https://world.optimizely.com/documentation/developer-guides/CMS/personalization/Configuring-personalization/)
 
 ## Features
+
 * Get languagebranch by geolocation, preferred browser languages or both
 * [Commerce] Get market by geolocation and preferred browser languages
 * Override ip address for local development testing (by setting a cookie)
 
 ## How to get started?
+
 * `dotnet add-package Geta.Optimizely.GeolocationTools`
 * `dotnet add-package Geta.Optimizely.GeolocationTools.Commerce`
 * add following line to your `ConfigureServices` method (usually in `Startup.cs`)
@@ -35,8 +40,9 @@ app.UseGeolocationTools();
 ## Details
 
 ### Local development
-For local development add a cookie to override the ip adress to an ip you want to test.
-Either in code:
+
+For local development add a cookie to override the ip adress to an ip you want to test. Either in code:
+
 ```csharp
 // This will be gone next request
 Request.Cookies.Add(new HttpCookie(Geta.EPi.GeolocationTools.Constants.IPAddressOverride)
@@ -55,6 +61,7 @@ HttpContext.Response.SetCookie(new HttpCookie(Geta.EPi.GeolocationTools.Constant
 // Chinese market (if available)
 var result = _commerceGeolocationService.GetMarket(Request);
 ```
+
 Or add a cookie "geolocation_ip_override" in your browser dev tools.
 ![Dev tools cookie](/docs/images/cookie-dev-tools.png)
 
@@ -92,6 +99,7 @@ public class LanguageBranchExample : Controller
     }
 }
 ```
+
 ### Code example - Geta.Optimizely.GeolocationTools.Commerce
 
 Register ICurrentMarket implementation
@@ -129,5 +137,6 @@ public class MarketExample : Controller
 ```
 
 ## Package maintainer
+
 https://github.com/brianweet
 

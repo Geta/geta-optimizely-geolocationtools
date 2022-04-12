@@ -52,7 +52,9 @@ namespace Geta.Optimizely.GeolocationTools.Services
         /// 1. Language branch for users' location AND browser preferences
         /// 2. null
         /// </summary>
-        LanguageBranch GetLanguageByCountryAndBrowserLanguage(IGeolocationResult location, IEnumerable<string> userBrowserLanguages);
+        LanguageBranch GetLanguageByCountryAndBrowserLanguage(
+            IGeolocationResult location,
+            IEnumerable<string> userBrowserLanguages);
 
         /// <summary>
         /// Gets the language based on the users' location AND browser preferences.

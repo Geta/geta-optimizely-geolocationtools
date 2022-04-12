@@ -64,9 +64,7 @@ namespace Geta.Optimizely.GeolocationTools.Services
                 throw new ArgumentNullException(nameof(location));
             }
 
-            return _enabledLanguageBranches
-                .Where(IsLanguageBranchForCountry(location))
-                .FirstOrDefault();
+            return _enabledLanguageBranches.FirstOrDefault(IsLanguageBranchForCountry(location));
         }
 
         /// <summary>
@@ -92,9 +90,7 @@ namespace Geta.Optimizely.GeolocationTools.Services
                 throw new ArgumentNullException(nameof(userBrowserLanguages));
             }
 
-            return _enabledLanguageBranches
-                .Where(IsLanguageBranchForBrowserLanguage(userBrowserLanguages))
-                .FirstOrDefault();
+            return _enabledLanguageBranches.FirstOrDefault(IsLanguageBranchForBrowserLanguage(userBrowserLanguages));
         }
 
         /// <summary>
@@ -113,7 +109,9 @@ namespace Geta.Optimizely.GeolocationTools.Services
         /// 1. Language branch for users' location AND browser preferences
         /// 2. null
         /// </summary>
-        public LanguageBranch GetLanguageByCountryAndBrowserLanguage(IGeolocationResult location, IEnumerable<string> userBrowserLanguages)
+        public LanguageBranch GetLanguageByCountryAndBrowserLanguage(
+            IGeolocationResult location,
+            IEnumerable<string> userBrowserLanguages)
         {
             if (location == null)
             {
@@ -126,9 +124,8 @@ namespace Geta.Optimizely.GeolocationTools.Services
             }
 
             return _enabledLanguageBranches
-                .Where(IsLanguageBranchForCountry(location))
-                .Where(IsLanguageBranchForBrowserLanguage(userBrowserLanguages))
-                .FirstOrDefault();
+                .FirstOrDefault(x => IsLanguageBranchForCountry(location, x)
+                                     && IsLanguageBranchForBrowserLanguage(userBrowserLanguages, x));
         }
 
         /// <summary>
@@ -151,7 +148,7 @@ namespace Geta.Optimizely.GeolocationTools.Services
                 throw new ArgumentNullException(nameof(requestRequest));
             }
 
-            return GetLocation(IPAddressHelper.GetRequestIpAddress(requestRequest));
+            return GetLocation(IpAddressHelper.GetRequestIpAddress(requestRequest));
         }
 
         public IGeolocationResult GetLocation(IPAddress ipAddress)
@@ -181,15 +178,25 @@ namespace Geta.Optimizely.GeolocationTools.Services
             return BrowserLanguageHelper.GetBrowserLanguages(request);
         }
 
-        private Func<LanguageBranch, bool> IsLanguageBranchForCountry(IGeolocationResult location)
+        private static bool IsLanguageBranchForCountry(IGeolocationResult location, LanguageBranch languageBranch)
         {
-            return x => x.Culture.Name.Contains('-') &&
-                        x.Culture.Name.EndsWith(location.CountryCode);
+            return languageBranch.Culture.Name.Contains('-')
+                   && languageBranch.Culture.Name.EndsWith(location.CountryCode);
         }
 
-        private Func<LanguageBranch, bool> IsLanguageBranchForBrowserLanguage(IEnumerable<string> location)
+        private static Func<LanguageBranch, bool> IsLanguageBranchForCountry(IGeolocationResult location)
         {
-            return x => location.Any(l => l.Equals(x.Culture.Name, StringComparison.InvariantCultureIgnoreCase));
+            return x => IsLanguageBranchForCountry(location, x);
+        }
+
+        private static bool IsLanguageBranchForBrowserLanguage(IEnumerable<string> location, LanguageBranch languageBranch)
+        {
+            return location.Any(l => l.Equals(languageBranch.Culture.Name, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        private static Func<LanguageBranch, bool> IsLanguageBranchForBrowserLanguage(IEnumerable<string> location)
+        {
+            return x => IsLanguageBranchForBrowserLanguage(location, x);
         }
 
         private LanguageBranch GetFallbackLanguageBranch()

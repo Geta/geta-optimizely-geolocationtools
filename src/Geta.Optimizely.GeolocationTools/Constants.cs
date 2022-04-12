@@ -3,8 +3,8 @@
 
 namespace Geta.Optimizely.GeolocationTools
 {
-    public class Constants
+    public static class Constants
     {
-        public const string IPAddressOverride = "geolocation_ip_override";
+        public const string IpAddressOverride = "geolocation_ip_override";
     }
 }

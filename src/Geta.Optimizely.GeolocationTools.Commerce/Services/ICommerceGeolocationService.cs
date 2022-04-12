@@ -20,18 +20,18 @@ namespace Geta.Optimizely.GeolocationTools.Commerce.Services
         ICommerceGeolocationResult GetMarket(HttpRequest request);
 
         /// <summary>
+        /// Gets the market based on the IP address.
+        /// </summary>
+        /// <param name="geolocationResult">The geolocation result.</param>
+        /// <returns></returns>
+        IMarket GetMarket(IGeolocationResult geolocationResult);
+
+        /// <summary>
         /// Gets the language based on the browser UserLanguages and the given market.
         /// </summary>
         /// <param name="request">The request.</param>
         /// <param name="market">The market.</param>
         /// <returns></returns>
         CultureInfo GetLanguage(HttpRequest request, IMarket market);
-
-        /// <summary>
-        /// Gets the market based on the IP address.
-        /// </summary>
-        /// <param name="geolocationResult">The geolocation result.</param>
-        /// <returns></returns>
-        IMarket GetMarket(IGeolocationResult geolocationResult);
     }
 }

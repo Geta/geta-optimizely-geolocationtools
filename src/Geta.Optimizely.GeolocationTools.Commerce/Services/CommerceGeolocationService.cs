@@ -44,41 +44,12 @@ namespace Geta.Optimizely.GeolocationTools.Commerce.Services
             if (location != null)
             {
                 var (market, language) = GetMarket(request, location);
-                return new CommerceGeolocationResult
-                {
-                    Market = market,
-                    Language = language,
-                    Location = location
-                };
+                return new CommerceGeolocationResult { Market = market, Language = language, Location = location };
             }
             else
             {
                 return new CommerceGeolocationResult();
             }
-        }
-
-        /// <summary>
-        /// Gets the language based on the browser UserLanguages and the given market.
-        /// </summary>
-        /// <param name="request">The request.</param>
-        /// <param name="market">The market.</param>
-        /// <returns></returns>
-        public CultureInfo GetLanguage(HttpRequest request, IMarket market)
-        {
-            if (request == null)
-            {
-                throw new System.ArgumentNullException(nameof(request));
-            }
-
-            if (market == null)
-            {
-                throw new System.ArgumentNullException(nameof(market));
-            }
-
-            var language = _geolocationService.GetBrowserLanguages(request)
-                .Select(x => market.Languages.FirstOrDefault(l => l.Name.Equals(x)))
-                .FirstOrDefault(x => x != null);
-            return language;
         }
 
         /// <summary>
@@ -105,6 +76,30 @@ namespace Geta.Optimizely.GeolocationTools.Commerce.Services
                 EnabledMarkets.Where(market => market.Countries.Any(c => c.Equals(country.Alpha3)));
 
             return marketsWithCountry.FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets the language based on the browser UserLanguages and the given market.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="market">The market.</param>
+        /// <returns></returns>
+        public CultureInfo GetLanguage(HttpRequest request, IMarket market)
+        {
+            if (request == null)
+            {
+                throw new System.ArgumentNullException(nameof(request));
+            }
+
+            if (market == null)
+            {
+                throw new System.ArgumentNullException(nameof(market));
+            }
+
+            var language = _geolocationService.GetBrowserLanguages(request)
+                .Select(x => market.Languages.FirstOrDefault(l => l.Name.Equals(x)))
+                .FirstOrDefault(x => x != null);
+            return language;
         }
 
         private (IMarket market, CultureInfo uiLanguage) GetMarket(HttpRequest request, IGeolocationResult geolocationResult)

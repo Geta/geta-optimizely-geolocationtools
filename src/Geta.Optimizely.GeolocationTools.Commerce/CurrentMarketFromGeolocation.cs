@@ -13,7 +13,7 @@ namespace Geta.Optimizely.GeolocationTools.Commerce
     public class CurrentMarketFromGeolocation : ICurrentMarket
     {
         private const string MarketCookie = "MarketFromGeolocation";
-        protected static MarketId DefaultMarketId; // TODO check if it is enabled?
+        protected readonly MarketId DefaultMarketId;
         protected readonly IMarketService MarketService;
         protected readonly ICommerceGeolocationService CommerceGeolocationService;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -43,17 +43,17 @@ namespace Geta.Optimizely.GeolocationTools.Commerce
                 return new MarketId(marketName);
             }
 
-            if (_httpContextAccessor.HttpContext != null)
+            if (_httpContextAccessor.HttpContext == null)
             {
-                var result = CommerceGeolocationService.GetMarket(_httpContextAccessor.HttpContext.Request);
-                var market = result.Market;
-                var marketId = market?.MarketId ?? DefaultMarketId;
-                CookieHelper.Set(MarketCookie, marketId.Value);
-
-                return marketId;
+                return DefaultMarketId;
             }
 
-            return DefaultMarketId;
+            var result = CommerceGeolocationService.GetMarket(_httpContextAccessor.HttpContext.Request);
+            var market = result.Market;
+            var marketId = market?.MarketId ?? DefaultMarketId;
+            CookieHelper.Set(MarketCookie, marketId.Value);
+
+            return marketId;
         }
 
         public virtual void SetCurrentMarket(MarketId marketId)
