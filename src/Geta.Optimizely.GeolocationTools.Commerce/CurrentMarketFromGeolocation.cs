@@ -2,7 +2,6 @@
 // Licensed under Apache-2.0. See the LICENSE file in the project root for more information
 
 using System.Linq;
-using EPiServer.Business.Commerce;
 using Geta.Optimizely.GeolocationTools.Commerce.Services;
 using Mediachase.Commerce;
 using Mediachase.Commerce.Markets;
@@ -17,6 +16,8 @@ namespace Geta.Optimizely.GeolocationTools.Commerce
         protected readonly IMarketService MarketService;
         protected readonly ICommerceGeolocationService CommerceGeolocationService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public HttpContext HttpContext => _httpContextAccessor.HttpContext;
 
         public CurrentMarketFromGeolocation(
             IMarketService marketService,
@@ -37,7 +38,7 @@ namespace Geta.Optimizely.GeolocationTools.Commerce
 
         private MarketId GetMarketId()
         {
-            var marketName = CookieHelper.Get(MarketCookie);
+            var marketName = GetCookieValue();
             if (!string.IsNullOrEmpty(marketName))
             {
                 return new MarketId(marketName);
@@ -51,19 +52,29 @@ namespace Geta.Optimizely.GeolocationTools.Commerce
             var result = CommerceGeolocationService.GetMarket(_httpContextAccessor.HttpContext.Request);
             var market = result.Market;
             var marketId = market?.MarketId ?? DefaultMarketId;
-            CookieHelper.Set(MarketCookie, marketId.Value);
+            SetCookie(marketId.Value);
 
             return marketId;
         }
 
         public virtual void SetCurrentMarket(MarketId marketId)
         {
-            CookieHelper.Set(MarketCookie, marketId.Value);
+            SetCookie(marketId.Value);
         }
 
         protected virtual IMarket GetMarket(MarketId marketId)
         {
             return MarketService.GetMarket(marketId) ?? MarketService.GetMarket(DefaultMarketId);
+        }
+
+        private string GetCookieValue()
+        {
+            return _httpContextAccessor.HttpContext?.Request.Cookies[MarketCookie];
+        }
+
+        private void SetCookie(string value)
+        {
+            HttpContext?.Response.Cookies.Append(MarketCookie, value);
         }
     }
 }
